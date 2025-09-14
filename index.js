@@ -5,10 +5,11 @@ const simpleGit = require("simple-git");
 
 const TOKEN = process.env.BOT_TOKEN;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const WHITELIST_ROLE = process.env.WHITELIST_ROLE; // Role ID allowed to add/remove
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = "whitelist.json";
 const REPO = "maybedelusional"; // 🔥 change to your GitHub username/repo
-const BRANCH = "main";             // or "master" depending on your repo
+const BRANCH = "main";             // or "master" if that’s your default branch
 
 // --- Load existing whitelist safely ---
 let WHITELIST = [];
@@ -69,6 +70,14 @@ bot.on("messageCreate", async (msg) => {
   if (!msg.content.startsWith("!sigmaline")) return;
 
   const [cmd, action, username] = msg.content.split(" ");
+
+  // Restrict add/remove to members with WHITELIST_ROLE
+  if ((action === "add" || action === "remove") && username) {
+    if (!msg.member.roles.cache.has(WHITELIST_ROLE)) {
+      msg.reply("⛔ You don’t have permission to modify the whitelist.");
+      return;
+    }
+  }
 
   if (action === "add" && username) {
     if (!WHITELIST.includes(username)) {
