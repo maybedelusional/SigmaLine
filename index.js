@@ -8,7 +8,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const WHITELIST_ROLE = process.env.WHITELIST_ROLE; // Role ID allowed to add/remove
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = "whitelist.json";
-const REPO = "const REPO = "maybedelusional/SigmaLine";"; // 🔥 change to your GitHub username/repo
+const REPO = "maybedelusional/SigmaLine"; // 🔥 change to your GitHub username/repo
 const BRANCH = "main";             // or "master" if that’s your default branch
 
 // --- Load existing whitelist safely ---
