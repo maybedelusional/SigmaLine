@@ -33,6 +33,10 @@ async function saveWhitelist() {
 
   const git = simpleGit();
   try {
+    // Configure commit identity (needed on Render)
+    await git.addConfig("user.email", "xx6380010@gmail.com");
+    await git.addConfig("user.name", "maybedelusional");
+
     await git.add(DATA_FILE);
     await git.commit("Update whitelist.json");
     await git.push(
