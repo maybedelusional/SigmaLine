@@ -10,11 +10,20 @@ const DATA_FILE = "whitelist.json";
 const REPO = "maybedelusional"; // 🔥 change to your GitHub username/repo
 const BRANCH = "main";             // or "master" depending on your repo
 
-// --- Load existing whitelist ---
+// --- Load existing whitelist safely ---
 let WHITELIST = [];
 if (fs.existsSync(DATA_FILE)) {
-  WHITELIST = JSON.parse(fs.readFileSync(DATA_FILE));
-  console.log("✅ Loaded whitelist:", WHITELIST);
+  try {
+    const raw = fs.readFileSync(DATA_FILE, "utf8");
+    WHITELIST = raw.trim().length > 0 ? JSON.parse(raw) : [];
+    console.log("✅ Loaded whitelist:", WHITELIST);
+  } catch (err) {
+    console.error("⚠️ Failed to parse whitelist.json, resetting:", err.message);
+    WHITELIST = [];
+  }
+} else {
+  WHITELIST = [];
+  fs.writeFileSync(DATA_FILE, "[]");
 }
 
 // --- Save whitelist + push to GitHub ---
